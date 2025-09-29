@@ -19,7 +19,7 @@ struct City {
     func currentTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .medium
+        dateFormatter.timeStyle = .short
         dateFormatter.timeZone = timezone()
 
         return dateFormatter.string(from: Date.now)

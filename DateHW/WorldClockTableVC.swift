@@ -19,11 +19,14 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
     }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
+        
+        tableView.register(WorldClockTableViewCell.self, forCellReuseIdentifier: WorldClockTableViewCell.reuseID)
         
         title = "World Clock"
         navigationItem.leftBarButtonItem = editButtonItem
@@ -38,13 +41,11 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let city = selectedCities[indexPath.row]
         
-        var contentConfig = cell.defaultContentConfiguration()
-        contentConfig.text = selectedCities[indexPath.row].name
-        contentConfig.secondaryText = selectedCities[indexPath.row].country
-        
-        cell.contentConfiguration = contentConfig
+        let cell = tableView.dequeueReusableCell(withIdentifier: WorldClockTableViewCell.reuseID, for: indexPath) as! WorldClockTableViewCell
+
+        cell.configureCell(for: city)
         
         return cell
     }
@@ -72,6 +73,65 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
         citiesTableVC.citySelectorDelegate = self
         let modalVC = UINavigationController(rootViewController: citiesTableVC)
         present(modalVC, animated: true)
+    }
+    
+}
+
+class WorldClockTableViewCell: UITableViewCell {
+    
+    static let reuseID = "WorldClockTableViewCell"
+    
+    private let cityLabel = UILabel()
+    private let countryLabel = UILabel()
+    private let timeLabel = UILabel()
+    
+    override init(style: CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureCell(for city: City) {
+        cityLabel.text = city.name
+        countryLabel.text = city.country
+        timeLabel.text = city.currentTime()
+    }
+    
+    private func setupUI() {
+        
+        let labelStack = UIStackView(arrangedSubviews: [cityLabel, countryLabel])
+        labelStack.axis = .vertical
+        
+        cityLabel.font = .preferredFont(forTextStyle: .extraLargeTitle2)
+        cityLabel.textAlignment = .left
+        
+        countryLabel.font = .preferredFont(forTextStyle: .callout)
+        countryLabel.textAlignment = .left
+        countryLabel.textColor = .secondaryLabel
+        
+        contentView.addSubview(labelStack)
+        labelStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        timeLabel.font = .boldSystemFont(ofSize: cityLabel.font.pointSize * 2)
+        timeLabel.textAlignment = .right
+        contentView.addSubview(timeLabel)
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            labelStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            labelStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            labelStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            labelStack.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor),
+            
+            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+        
     }
     
 }
