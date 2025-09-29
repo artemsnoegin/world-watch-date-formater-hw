@@ -8,6 +8,13 @@
 
 class DataStore {
     
+    let defaultCities = [
+        City(name: "New York", country: "USA", timezoneID: "America/New_York"),
+        City(name: "London", country: "UK", timezoneID: "Europe/London"),
+        City(name: "Moscow", country: "Russia", timezoneID: "Europe/Moscow"),
+        City(name: "Tokyo", country: "Japan", timezoneID: "Asia/Tokyo"),
+    ]
+    
     let cities: [City] = [
         // UTC-12
         City(name: "Baker Island", country: "USA", timezoneID: "Pacific/Pago_Pago"),

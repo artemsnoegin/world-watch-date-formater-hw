@@ -9,7 +9,9 @@ import UIKit
 
 class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
 
-    private var selectedCities = [City]()
+    private var selectedCities = DataStore().defaultCities
+    
+    private var timer = Timer()
     
     func didSelectCity(_ city: City) {
         selectedCities.append(city)
@@ -21,6 +23,7 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
         super.viewDidLoad()
         
         setupUI()
+        setupTimer()
     }
     
     private func setupUI() {
@@ -33,7 +36,6 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
         navigationItem.leftBarButtonItem?.tintColor = .systemOrange
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addTapped))
         navigationItem.rightBarButtonItem?.tintColor = .systemOrange
-
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -75,6 +77,20 @@ class WorldClockTableVC: UITableViewController, CitySelectorDelegate {
         present(modalVC, animated: true)
     }
     
+    private func setupTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateTime()
+        }
+    }
+    
+    private func updateTime() {
+        tableView.reloadData()
+    }
+    
+    deinit {
+        timer.invalidate()
+    }
+    
 }
 
 class WorldClockTableViewCell: UITableViewCell {
@@ -102,7 +118,6 @@ class WorldClockTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        
         let labelStack = UIStackView(arrangedSubviews: [cityLabel, countryLabel])
         labelStack.axis = .vertical
         
@@ -131,7 +146,6 @@ class WorldClockTableViewCell: UITableViewCell {
             timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
-        
     }
     
 }
