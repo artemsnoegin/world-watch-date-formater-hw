@@ -1,10 +1,10 @@
 //
-//  CitySelectorDelegate.swift
+//  SelectCityViewControllerDelegate.swift
 //  DateHW
 //
 //  Created by Артём Сноегин on 24.09.2025.
 //
 
-protocol CitySelectorDelegate: AnyObject {
+protocol SelectCityViewControllerDelegate: AnyObject {
     func didSelectCity(_ city: City)
 }

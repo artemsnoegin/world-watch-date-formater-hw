@@ -8,14 +8,26 @@
 
 class DataStore {
     
-    let defaultCities = [
+    func loadDefaultCities() -> [City] {
+        defaultCities
+    }
+    
+    func loadCities() -> [City] {
+        cities
+    }
+    
+    private var defaultCities: [City] = [
+        // UTC-5
         City(name: "New York", country: "USA", timezoneID: "America/New_York"),
+        // UTC±0
         City(name: "London", country: "UK", timezoneID: "Europe/London"),
+        // UTC+3
         City(name: "Moscow", country: "Russia", timezoneID: "Europe/Moscow"),
+        // UTC+9
         City(name: "Tokyo", country: "Japan", timezoneID: "Asia/Tokyo"),
     ]
-    
-    let cities: [City] = [
+
+    private var cities: [City] = [
         // UTC-12
         City(name: "Baker Island", country: "USA", timezoneID: "Pacific/Pago_Pago"),
         
@@ -122,5 +134,5 @@ class DataStore {
         // UTC+14
         City(name: "Kiritimati", country: "Kiribati", timezoneID: "Pacific/Kiritimati")
     ]
-
+    
 }
