@@ -38,7 +38,7 @@ class WorldClockViewController: UIViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: animated)
-    }
+        navigationItem.rightBarButtonItem?.isHidden = editing    }
     
     @objc private func addTapped() {
         let cities = DataStore().loadCities().filter {
@@ -125,6 +125,10 @@ extension WorldClockViewController: UITableViewDataSource {
         
         selectedCities.remove(at: sourceIndexPath.row)
         selectedCities.insert(city, at: destinationIndexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }
